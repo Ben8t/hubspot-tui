@@ -1,5 +1,7 @@
 # HubSpot CLI
 
+![demo](misc/demo.gif)
+
 This project aims to provide a simple CLI to interact with [HubSpot API](https://www.hubspot.com/).
 
 Frontend is made with the great [Gum](https://github.com/charmbracelet/gum), backend is in Python.
