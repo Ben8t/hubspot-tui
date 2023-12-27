@@ -12,4 +12,4 @@ Frontend is made with the great [Gum](https://github.com/charmbracelet/gum), bac
 
 1️⃣ [Install Gum](https://github.com/charmbracelet/gum?tab=readme-ov-file#installation)
 
-2️⃣ Fill the `HS_API_TOKEN` environment variable (see `.env.example`): HubSpot API Token.
+2️⃣ Fill the `HS_API_TOKEN` (HubSpot API Token) and `HS_ACCOUNT_ID` (HubSpot Account ID) environment variables (see `.env.example`).
