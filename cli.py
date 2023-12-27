@@ -1,5 +1,6 @@
 from dotenv import dotenv_values
 import json
+import os
 import requests
 import subprocess
 
@@ -21,7 +22,8 @@ class CLI:
         return gum_output.stdout.strip().split("\n")
 
     def prompt(self, input_placehoder):
-        value = self.process(subprocess.run(["gum", "input", "--placeholder", input_placehoder], stdout=subprocess.PIPE, text=True))
+        command = f'gum input --placeholder {input_placehoder}'
+        value = self.process(subprocess.run(command, shell=True, stdout=subprocess.PIPE, text=True))
         return value[0]
 
     def create_contact(self):
@@ -90,7 +92,10 @@ class CLI:
         
 
     def launch_menu(self):
-        command = 'gum choose --cursor="👉 " "0. Create Deal" "1. Create Company" "2. Create Contact" "3. Get Company" "4. Get Contact"'
+        command = 'gum style --border double --margin "1" --padding "1 2" --border-foreground "#FF7A59" "👋 Welcome to $(gum style --foreground "#FF7A59" \'HubSpot CLI\')"'
+        process = subprocess.run(command, shell=True, stdout=subprocess.PIPE, text=True)
+        print(process.stdout)
+        command = 'gum choose --cursor="> " "0. Create Deal 🤝" "1. Create Company 🏢" "2. Create Contact 📞" "3. Get Company" "4. Get Contact"'
         process = subprocess.run(command, shell=True, stdout=subprocess.PIPE, text=True)
         id = process.stdout.split(".")[0].strip()
         if id == "0":
@@ -106,6 +111,11 @@ class CLI:
         
 
 if __name__ == "__main__":
+    os.environ['GUM_INPUT_PROMPT_FOREGROUND'] = "#FF7A59"
+    os.environ['GUM_CHOOSE_PROMPT_FOREGROUND'] = "#FF7A59"
+    os.environ['GUM_CHOOSE_CURSOR_FOREGROUND'] = "#FF7A59"
+    os.environ['GUM_FILTER_PROMPT_FOREGROUND'] = "#FF7A59"
+    os.environ['GUM_FILTER_MATCH_FOREGROUND'] = "#FF7A59"
     cli = CLI()
     cli.launch_menu()
 
