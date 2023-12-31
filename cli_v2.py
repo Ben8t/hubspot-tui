@@ -95,7 +95,6 @@ class TUI:
                 pass
             
         items_string = "\\n".join(display_companies)
-        print(display_companies)
         command = f"echo '{items_string}' | gum filter"
         process = self.run_command(command)
         company_id = process.stdout.split("-")[-1].strip()
