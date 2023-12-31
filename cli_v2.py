@@ -7,11 +7,11 @@ from concurrent.futures import ThreadPoolExecutor
 from tqdm import tqdm
 import time
 
-class CLI:
+class TUI:
 
     def __init__(self, hs_client):
         self.hs_client = hs_client
-        command = 'gum style --border double --margin "1" --padding "1 2" --border-foreground "#FF7A59" "👋 Welcome to $(gum style --foreground "#FF7A59" \'HubSpot CLI\')"'
+        command = 'gum style --border double --margin "1" --padding "1 2" --border-foreground "#FF7A59" "👋 Welcome to $(gum style --foreground "#FF7A59" \'HubSpot TUI\')"'
         process = self.run_command(command)
         print(process.stdout)
         self.contacts, self.companies = self.get_assets()
@@ -121,7 +121,7 @@ class CLI:
         if id == "5":
             self.contacts, self.companies = self.get_assets()
         
-        command = 'gum confirm "Do you want to stay in the CLI?"'
+        command = 'gum confirm "Do you want to stay in the TUI?"'
         process = self.run_command(command)
         if process.returncode == 0:
             self.launch_menu()
@@ -139,5 +139,5 @@ if __name__ == "__main__":
     
     hs_client = HubSpotClient(env_variables.get('HS_API_TOKEN'), env_variables.get("HS_ACCOUNT_ID"))
     
-    cli = CLI(hs_client)
-    cli.launch_menu()
+    tui = TUI(hs_client)
+    tui.launch_menu()
