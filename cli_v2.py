@@ -34,15 +34,37 @@ class TUI:
         email = self.prompt("email")
         firstname = self.prompt("firstname")
         lastname = self.prompt("lastname")
-        self.hs_client.create_contact(email, firstname, lastname)
+        return self.hs_client.create_contact(email, firstname, lastname)
 
     def create_company(self):
         name = self.prompt("name")
         domain = self.prompt("domain")
-        self.hs_client.create_company(self, name, domain)
+        return self.hs_client.create_company(name, domain)
+
+    def create_deal(self):
+        command = 'gum confirm "Do you want to create a company?"'
+        process = self.run_command(command)
+        if process.returncode == 0:
+            company_id = self.create_company()
+        else:
+            company_id = self.get_company()
+        
+        command = 'gum confirm "Do you want to create a contact?"'
+        process = self.run_command(command)
+        if process.returncode == 0:
+            contact_id = self.create_contact()
+        else:
+            contact_id = self.get_contact()
+
+        deal_name = self.prompt("dealname")
+        deal_stage = self.get_stage()
+        pipeline_id = self.hs_client.get_pipeline().get("pipeline_id")
+
+        deal_id = self.hs_client.create_deal(deal_name, deal_stage, pipeline_id, company_id, contact_id)
+        print(f"🖇️ https://app-eu1.hubspot.com/contacts/{self.hs_client.account_id}/record/0-3/{deal_id}")
 
     def get_assets(self):
-        command = 'gum spin --spinner meter --title "Loading assets (companies, contacts)..." -- sleep 15'
+        command = 'gum spin --spinner meter --title "Loading assets (companies, contacts)..." -- sleep 5'
         command_thread = threading.Thread(target=self.run_command, args=(command,))
         command_thread.start()
 
@@ -103,13 +125,19 @@ class TUI:
         print(f"🖇️ https://app-eu1.hubspot.com/contacts/{self.hs_client.account_id}/record/0-1/{contact_id}")
         return contact_id
 
+    def get_stage(self):
+        stages = [ f'{s.get("stage_id")} - {s.get("label")}' for s in self.hs_client.get_pipeline().get("stages")]
+        items_string = "\\n".join(stages)
+        command = f"echo '{items_string}' | gum filter"
+        process = self.run_command(command)
+        return process.stdout.split("-")[0].strip()
+
     def launch_menu(self):
         command = 'gum choose --cursor="> " "0. Create Deal 🤝" "1. Create Company 🏢" "2. Create Contact 📞" "3. Get Company" "4. Get Contact" "5. Refresh data 🆕"'
         process = self.run_command(command)
         id = process.stdout.split(".")[0].strip()
         if id == "0":
-            pass
-            #self.create_deal()
+            self.create_deal()
         if id == "1":
             self.create_company()
         if id == "2":

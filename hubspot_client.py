@@ -65,7 +65,6 @@ class HubSpotClient:
                 "associatedVids": [int(contact_id)]
             }
         }
-
         response = requests.post(self.deal_url, headers=self.headers, json=data)
         deal_id = response.json().get("dealId")
         if deal_id:
@@ -92,3 +91,13 @@ class HubSpotClient:
             results.extend(response.json().get("results"))
             next_page = response.json().get("paging")
         return results
+
+    def get_pipeline(self):
+        response = requests.get(self.pipeline_url, headers=self.headers)
+        data = response.json().get("results")[0]
+        pipeline_id = data.get("pipelineId")
+        stages = [{"stage_id": s.get("stageId"), "label": s.get("label")} for s in data.get("stages")]
+        return {
+            "pipeline_id": pipeline_id,
+            "stages": stages
+        }
