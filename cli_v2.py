@@ -119,7 +119,7 @@ class CLI:
         if id == "4":
             self.get_contact()
         if id == "5":
-            self.get_assets()
+            self.contacts, self.companies = self.get_assets()
         
         command = 'gum confirm "Do you want to stay in the CLI?"'
         process = self.run_command(command)
