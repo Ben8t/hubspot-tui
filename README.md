@@ -1,8 +1,8 @@
-# HubSpot CLI
+# HubSpot TUI
 
 ![demo](misc/demo.gif)
 
-This project aims to provide a simple CLI to interact with [HubSpot API](https://www.hubspot.com/).
+This project aims to provide a simple TUI to interact with [HubSpot API](https://www.hubspot.com/).
 
 Frontend is made with the great [Gum](https://github.com/charmbracelet/gum), backend is in Python.
 
