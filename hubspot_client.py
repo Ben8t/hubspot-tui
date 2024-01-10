@@ -94,7 +94,7 @@ class HubSpotClient:
 
     def get_pipeline(self):
         response = requests.get(self.pipeline_url, headers=self.headers)
-        data = response.json().get("results")[0]
+        data = response.json().get("results")[2]
         pipeline_id = data.get("pipelineId")
         stages = [{"stage_id": s.get("stageId"), "label": s.get("label")} for s in data.get("stages")]
         return {
